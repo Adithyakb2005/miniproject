@@ -1,16 +1,19 @@
-#music list
-
-playlist={}
-songlst=[]
+playlist = {}
+songlst = []
 
 while True:
-    print("\n 1.add song \n 2.display song \n 3.update song \n 4.remove song \n 5.exit")
-    ch=input("Enter the choice:")
-    if ch=='1':
-        song=input("Enter song name: ")
-        artist=input("Enter the artist: ")
-        playlist[song]={"artist":artist}
+    print("\n 1. Add song \n 2. Display songs \n 3. Update song \n 4. Remove song \n"
+          "\n 5. Clear playlist \n 6. Exit ")
+    
+    ch = input("Enter your choice: ")
+
+    if ch == '1':
+        song = input("Enter song name: ")
+        artist = input("Enter artist: ")
+        playlist[song] = {"artist": artist}
         songlst.append(song)
+        print("Song added successfully!")
+
     elif ch == '2':
         if not playlist:
             print("Playlist is empty.")
@@ -21,16 +24,11 @@ while True:
 
     elif ch == '3':
         song_name = input("Enter the song name to update: ")
-        song_artist=input("Enter song artist name:")
         if song_name in playlist:
             new_name = input("Enter the new name: ")
-            new_artist=input("Enter new artist name:")
             playlist[new_name] = playlist.pop(song_name)
-            playlist[new_artist]=playlist.pop(song_artist)
             index = songlst.index(song_name)
-            index=songlst.index(song_artist)
             songlst[index] = new_name
-            songlst[index]=new_artist
             print("Song updated successfully!")
         else:
             print("Song not found!")
@@ -44,6 +42,17 @@ while True:
         else:
             print("Song not found!")
 
-    elif ch=='5':
-        print("exiting.....")
-        break
+    
+    elif ch == '5':
+        confirm = input("Are you sure you want to clear the entire playlist? (yes/no): ")
+        if confirm.lower() == 'yes':
+            playlist.clear()
+            songlst.clear()
+            print("Playlist cleared.")
+        else:
+            print("Clear operation cancelled.")
+    elif ch == '6':
+        print("Exiting...")
+    break
+    
+   
