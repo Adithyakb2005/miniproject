@@ -1,4 +1,5 @@
-def add_expense(amount, category):
+
+def add_expense(amount, category,transactions):
     transaction = {'type': 'expense', 'amount': amount, 'category': category}
-    transaction.append(transaction)
+    transactions.append(transaction)
     print(f"Expense of ${amount} added successfully.")

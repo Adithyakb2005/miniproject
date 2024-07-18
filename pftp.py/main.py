@@ -17,21 +17,20 @@ def main():
         if choice == '1':
             amount = float(input("Enter income amount: "))
             category = input("Enter income category: ")
-            add_income(amount, category)
+            add_income(amount, category,transactions)
         elif choice == '2':
             amount = float(input("Enter expense amount: "))
             category = input("Enter expense category: ")
-            add_expense(amount, category)
+            add_expense(amount, category,transactions)
         elif choice == '3':
-            balance = calculate_balance()
-            print(f"Your current balance is: ${balance}")
+            balance=calculate_balance(transactions)
+            print(f"Current Balance: ${balance}")
         elif choice == '4':
-            view_transactions()
+            view_transactions(transactions)
         elif choice == '5':
             print("Exiting program. Goodbye!")
             break
         else:
             print("Invalid choice. Please enter a number from 1 to 5.")
 
-if __name__ == "__main__":
-    main()
+main()

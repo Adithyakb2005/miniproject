@@ -1,4 +1,6 @@
-def view_transactions():
-    print("All Transactions:")
-    for transaction in transaction:
-        print(f"{transaction['type'].title()} of ${transaction['amount']} in '{transaction['category']}' category")
+
+def view_transactions(transactions):
+    print("Transactions:")
+    for transaction in transactions:
+        print(f"- {transaction['type']}: ${transaction['amount']} (Category: {transaction['category']})")
+
