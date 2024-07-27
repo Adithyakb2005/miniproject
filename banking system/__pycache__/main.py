@@ -1,4 +1,3 @@
-# Account Class
 class Account:
     def __init__(self, account_number, account_holder, initial_balance=0):
         self._account_number = account_number
@@ -29,17 +28,17 @@ class Account:
         return f"Account({self._account_number}): {self._account_holder} with balance ${self._balance}"
 
 
-# User Class
+
 class User:
     def __init__(self, username, password):
         self._username = username
-        self._password = password  # Note: In real applications, use hashed passwords
+        self._password = password 
 
     def check_password(self, password):
         return self._password == password
 
 
-# Transaction Class
+
 class Transaction:
     def __init__(self, transaction_id, account, amount, transaction_type):
         self._transaction_id = transaction_id
@@ -57,7 +56,6 @@ class Transaction:
             print("Invalid transaction type.")
 
 
-# Bank Class
 class Bank:
     def __init__(self):
         self._accounts = {}
@@ -90,7 +88,6 @@ class Bank:
         if self._logged_in_user is None:
             print("Please log in first.")
             return
-        
         if account._account_number in self._accounts:
             print("Account already exists.")
         else:
@@ -122,9 +119,9 @@ class Bank:
         accounts_str = ""
         for account in self._accounts.values():
             accounts_str += str(account) + "\n"
-        return accounts_str.strip()  # Remove the trailing newline
+        return accounts_str.strip() 
 
-# Main Program
+
 def main():
     bank = Bank()
 
