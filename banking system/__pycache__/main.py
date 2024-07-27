@@ -1,60 +1,58 @@
-# Define all the classes in one script
-
 # Account Class
 class Account:
     def __init__(self, account_number, account_holder, initial_balance=0):
-        self.account_number = account_number
-        self.account_holder = account_holder
-        self.balance = initial_balance
+        self._account_number = account_number
+        self._account_holder = account_holder
+        self._balance = initial_balance
 
     def deposit(self, amount):
         if amount > 0:
-            self.balance += amount
-            print(f"Deposited {amount}. New balance is {self.balance}.")
+            self._balance += amount
+            print(f"Deposited ${amount}. New balance is ${self._balance}.")
         else:
             print("Deposit amount must be positive.")
 
     def withdraw(self, amount):
         if amount > 0:
-            if amount <= self.balance:
-                self.balance -= amount
-                print(f"Withdrew {amount}. New balance is {self.balance}.")
+            if amount <= self._balance:
+                self._balance -= amount
+                print(f"Withdrew ${amount}. New balance is ${self._balance}.")
             else:
                 print("Insufficient funds.")
         else:
             print("Withdrawal amount must be positive.")
 
     def get_balance(self):
-        return self.balance
+        return self._balance
 
     def __str__(self):
-        return f"Account({self.account_number}): {self.account_holder} with balance ${self.balance}"
+        return f"Account({self._account_number}): {self._account_holder} with balance ${self._balance}"
 
 
 # User Class
 class User:
     def __init__(self, username, password):
-        self.username = username
-        self.password = password  # In a real application, passwords should be hashed
+        self._username = username
+        self._password = password  # Note: In real applications, use hashed passwords
 
     def check_password(self, password):
-        return self.password == password
+        return self._password == password
 
 
 # Transaction Class
 class Transaction:
     def __init__(self, transaction_id, account, amount, transaction_type):
-        self.transaction_id = transaction_id
-        self.account = account
-        self.amount = amount
-        self.transaction_type = transaction_type
+        self._transaction_id = transaction_id
+        self._account = account
+        self._amount = amount
+        self._transaction_type = transaction_type
         self.process_transaction()
 
     def process_transaction(self):
-        if self.transaction_type == "deposit":
-            self.account.deposit(self.amount)
-        elif self.transaction_type == "withdrawal":
-            self.account.withdraw(self.amount)
+        if self._transaction_type == "deposit":
+            self._account.deposit(self._amount)
+        elif self._transaction_type == "withdrawal":
+            self._account.withdraw(self._amount)
         else:
             print("Invalid transaction type.")
 
@@ -62,63 +60,69 @@ class Transaction:
 # Bank Class
 class Bank:
     def __init__(self):
-        self.accounts = {}
-        self.users = {}
-        self.logged_in_user = None
+        self._accounts = {}
+        self._users = {}
+        self._logged_in_user = None
 
     def register_user(self, username, password):
-        if username in self.users:
+        if username in self._users:
             print("User already exists.")
         else:
-            self.users[username] = User(username, password)
+            self._users[username] = User(username, password)
             print(f"User {username} registered successfully.")
 
     def login_user(self, username, password):
-        user = self.users.get(username)
+        user = self._users.get(username)
         if user and user.check_password(password):
-            self.logged_in_user = username
+            self._logged_in_user = username
             print(f"User {username} logged in successfully.")
         else:
             print("Invalid username or password.")
 
     def logout_user(self):
-        self.logged_in_user = None
-        print("Logged out successfully.")
+        if self._logged_in_user is None:
+            print("No user is currently logged in.")
+        else:
+            self._logged_in_user = None
+            print("Logged out successfully.")
 
     def add_account(self, account):
-        if self.logged_in_user is None:
+        if self._logged_in_user is None:
             print("Please log in first.")
             return
         
-        if account.account_number in self.accounts:
+        if account._account_number in self._accounts:
             print("Account already exists.")
         else:
-            self.accounts[account.account_number] = account
-            print(f"Account {account.account_number} added.")
+            self._accounts[account._account_number] = account
+            print(f"Account {account._account_number} added.")
 
     def remove_account(self, account_number):
-        if self.logged_in_user is None:
+        if self._logged_in_user is None:
             print("Please log in first.")
             return
 
-        if account_number in self.accounts:
-            del self.accounts[account_number]
+        if account_number in self._accounts:
+            del self._accounts[account_number]
             print(f"Account {account_number} removed.")
         else:
             print("Account not found.")
 
     def get_account(self, account_number):
-        if self.logged_in_user is None:
+        if self._logged_in_user is None:
             print("Please log in first.")
             return None
 
-        return self.accounts.get(account_number, "Account not found.")
+        return self._accounts.get(account_number)
 
     def __str__(self):
-        if self.logged_in_user is None:
+        if self._logged_in_user is None:
             return "Please log in to view accounts."
-        return "\n".join(str(account) for account in self.accounts.values())
-
+        
+        accounts_str = ""
+        for account in self._accounts.values():
+            accounts_str += str(account) + "\n"
+        return accounts_str.strip()  # Remove the trailing newline
 
 # Main Program
 def main():
@@ -132,7 +136,8 @@ def main():
         print("4. Create Account")
         print("5. Remove Account")
         print("6. View Accounts")
-        print("7. Exit")
+        print("7. Withdraw Money")
+        print("8. Exit")
 
         choice = input("Enter choice: ")
 
@@ -150,18 +155,21 @@ def main():
             bank.logout_user()
 
         elif choice == "4":
-            if bank.logged_in_user is None:
+            if bank._logged_in_user is None:
                 print("You must be logged in to create an account.")
                 continue
             
             account_number = input("Enter account number: ")
             account_holder = input("Enter account holder name: ")
-            initial_balance = float(input("Enter initial balance: "))
-            account = Account(account_number, account_holder, initial_balance)
-            bank.add_account(account)
+            try:
+                initial_balance = float(input("Enter initial balance: "))
+                account = Account(account_number, account_holder, initial_balance)
+                bank.add_account(account)
+            except ValueError:
+                print("Invalid balance amount. Please enter a numeric value.")
 
         elif choice == "5":
-            if bank.logged_in_user is None:
+            if bank._logged_in_user is None:
                 print("You must be logged in to remove an account.")
                 continue
             
@@ -173,6 +181,26 @@ def main():
             print(bank)
 
         elif choice == "7":
+            if bank._logged_in_user is None:
+                print("You must be logged in to withdraw money.")
+                continue
+
+            account_number = input("Enter account number to withdraw from: ")
+            account = bank.get_account(account_number)
+            if account is None:
+                print("Account not found.")
+                continue
+            
+            try:
+                amount = float(input("Enter amount to withdraw: "))
+                if amount <= 0:
+                    print("Amount must be positive.")
+                    continue
+                account.withdraw(amount)
+            except ValueError:
+                print("Invalid amount. Please enter a numeric value.")
+
+        elif choice == "8":
             print("Exiting...")
             break
 
